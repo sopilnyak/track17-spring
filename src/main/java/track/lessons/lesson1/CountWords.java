@@ -35,7 +35,7 @@ public class CountWords {
     public long countNumbers(File file) throws Exception {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 
-        int acc = 0;
+        long acc = 0;
         String line;
         while ((line = bufferedReader.readLine()) != null) {
             try {
@@ -58,7 +58,7 @@ public class CountWords {
     public String concatWords(File file) throws Exception {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 
-        String acc = "";
+        StringBuilder acc = new StringBuilder();
         String line;
         while ((line = bufferedReader.readLine()) != null) {
             if (line.equals("")) {
@@ -67,15 +67,16 @@ public class CountWords {
             try {
                 Integer.parseInt(line);
             } catch (NumberFormatException e) {
-                acc += line + " ";
+                acc.append(line);
+                acc.append(" ");
             }
         }
 
         /* Remove last space */
         if (acc.length() > 0) {
-            acc = acc.substring(0, acc.length() - 1);
+            acc.setLength(acc.length() - 1);
         }
-        return acc;
+        return acc.toString();
     }
 
 }
