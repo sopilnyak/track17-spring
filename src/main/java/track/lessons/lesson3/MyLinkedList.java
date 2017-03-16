@@ -76,7 +76,9 @@ public class MyLinkedList extends List {
 
         Node currentNode = head;
         for (int i = 0; i < idx; i++) {
-            currentNode = currentNode.next;
+            if (currentNode.next != null) {
+                currentNode = currentNode.next;
+            }
         }
         return currentNode.val;
     }
