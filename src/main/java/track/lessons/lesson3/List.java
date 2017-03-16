@@ -14,7 +14,9 @@ public abstract class List {
     /**
      * Добавить элемент в конец списка
      */
-    abstract void add(int item);
+    void add(int item) {
+        size++;
+    }
 
     /**
      * удалить элемент по индексу idx, если такого индекса нет или он невалидный,
@@ -24,18 +26,30 @@ public abstract class List {
      * Метод, который может бросить ошибку должен быть отмечен как throws НазваниеИсключения
      * как сделано для этого метода
      */
-    abstract int remove(int idx) throws NoSuchElementException;
+    int remove(int idx) throws NoSuchElementException {
+        if (idx < 0 || idx >= size) {
+            throw new NoSuchElementException();
+        }
+        return 0;
+    }
 
 
     /**
      * Получить элемент с позиции idx, бросить исключение, если позиция невалидная
      */
-    abstract int get(int idx) throws NoSuchElementException;
+    int get(int idx) throws NoSuchElementException {
+        if (idx < 0 || idx >= size) {
+            throw new NoSuchElementException();
+        }
+        return 0;
+    }
 
     /**
      * Кол-во элементов списка
      */
-    abstract int size();
+    int size() {
+        return size;
+    }
 
-
+    int size;
 }
