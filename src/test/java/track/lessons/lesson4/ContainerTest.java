@@ -11,6 +11,7 @@ import track.container.beans.Gear;
 import java.io.File;
 
 import track.container.JsonConfigReader;
+import track.container.config.InvalidConfigurationException;
 
 public class ContainerTest {
 
@@ -44,15 +45,23 @@ public class ContainerTest {
         expectedCar.setGear(expectedGear);
     }
 
+    @Test(expected = Exception.class)
+    public void jsonConfigReaderTest() throws Exception {
+        ClassLoader classLoader = Container.class.getClassLoader();
+        File file = new File(
+                classLoader.getResource("config1.json").getFile());
+        container = new Container(new JsonConfigReader().parseBeans(file));
+    }
+
     @Test
-    public void testGetById() throws Exception {
+    public void getByIdTest() throws Exception {
         Car car = (Car) container.getById("carBean");
         Assert.assertTrue(car != null);
         Assert.assertEquals(expectedCar, car);
     }
 
     @Test
-    public void testGetByClass() throws Exception {
+    public void getByClassTest() throws Exception {
         Car car = (Car) container.getByClass("track.container.beans.Car");
         Assert.assertTrue(car != null);
         Assert.assertEquals(expectedCar, car);
