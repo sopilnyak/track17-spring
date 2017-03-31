@@ -15,7 +15,7 @@ import track.lections.Util;
  */
 public class Main {
 
-    static Logger log = LoggerFactory.getLogger(Main.class);
+    /* static Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
         Transformer<Image> transformer = new Transformer<>();
@@ -45,6 +45,6 @@ public class Main {
             log.info("Store finished.");
             return image.getImageInfo();
         }
-    }
+    } */
 
 }
