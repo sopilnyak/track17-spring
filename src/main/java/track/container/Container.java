@@ -46,9 +46,9 @@ public class Container {
     }
 
     private String getSetMethodName(String fieldName) {
-        return "set"
-                + Character.toUpperCase(fieldName.charAt(0))
-                + fieldName.substring(1);
+        return "set" +
+                Character.toUpperCase(fieldName.charAt(0)) +
+                fieldName.substring(1);
     }
 
     private void createObject(Bean bean) throws ClassNotFoundException,
