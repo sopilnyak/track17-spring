@@ -1,16 +1,13 @@
 package track.lessons.lesson5generics;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import track.util.Util;
 
 /**
  *
  */
+
 public class Cypher {
 
     public static final int SYMBOL_DIST = 32;
@@ -25,7 +22,11 @@ public class Cypher {
                 }
                 // Если это буква, то собираем частотную информацию
 
-
+                if (map.containsKey(ch)) {
+                    map.put(ch, map.get(ch) + 1);
+                } else {
+                    map.put(ch, 1);
+                }
 
             }
         }
@@ -33,22 +34,33 @@ public class Cypher {
     }
 
     /**
-    На вход приходит текст
-    1. Считываем readData() и получаем мапу {Символ -> Кол-во употреблений}
-    2. Далее нам нужно отсортировать пары ключ-значение по значению
+     На вход приходит текст
+     1. Считываем readData() и получаем мапу {Символ -> Кол-во употреблений}
+     2. Далее нам нужно отсортировать пары ключ-значение по значению
      (Называются{@code List<Map.Entry<Character, Integer>>})
      (то есть по частоте употребления). Для этого можно создать список этих пар и отсортировать список.
      У java.lang.List есть вспомогательный метод {@link List#sort(Comparator)}
      Где Comparator - это логика сравнения объектов.
 
      3. После того, как получен отсортированный список {@code List<Map.Entry<Character, Integer>>} нужно превратить его
-        обратно в Map для того, чтобы иметь быстрый доступ get().
+     обратно в Map для того, чтобы иметь быстрый доступ get().
 
      */
+
     public Map<Character, Integer> buildHist(String data) {
         Map<Character, Integer> map = readData(data);
-
-        return null;
+        List<Map.Entry<Character, Integer>> list = new ArrayList<>(map.entrySet());
+        list.sort(new Comparator<Map.Entry<Character, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Character, Integer> o1, Map.Entry<Character, Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        Map<Character, Integer> sorted = new LinkedHashMap<>();
+        for (Map.Entry<Character, Integer> i : list) {
+            sorted.put(i.getKey(), i.getValue());
+        }
+        return sorted;
     }
 
     /**
@@ -60,7 +72,14 @@ public class Cypher {
      * @return расшифрованный текст
      */
     public String merge(List<Character> in, List<Character> out, String encrypted) {
-        return null;
+        String newString = "";
+        for (int i = 0; i < encrypted.length(); i++) {
+            if (out.indexOf(encrypted.charAt(i)) > 0 &&
+                    out.indexOf(encrypted.charAt(i)) < in.size()) {
+                newString += in.get(out.indexOf(encrypted.charAt(i)));
+            }
+        }
+        return newString;
     }
 
     public static void main(String[] args) {
@@ -70,6 +89,7 @@ public class Cypher {
 
         String encryptedText = Util.encrypt(Util.readFile("toEncrypt.txt"));
         Map<Character, Integer> encryptedHist = cypher.buildHist(encryptedText);
+        System.out.println(Util.readFile("toEncrypt.txt"));
 
         String result = cypher.merge(
                 new LinkedList<>(dataHist.keySet()),
