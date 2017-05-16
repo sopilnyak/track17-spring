@@ -2,19 +2,12 @@ package track.msgtest.messenger.messages;
 
 import java.util.Objects;
 
-/**
- * Простое текстовое сообщение
- */
-public class TextMessage extends Message {
+public class StatusMessage extends Message {
     private String text;
-    private long chatId;
 
-    public long getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(long chatId) {
-        this.chatId = chatId;
+    public StatusMessage(String text) {
+        type = Type.MSG_STATUS;
+        this.text = text;
     }
 
     public String getText() {
@@ -36,7 +29,7 @@ public class TextMessage extends Message {
         if (!super.equals(other)) {
             return false;
         }
-        TextMessage message = (TextMessage) other;
+        StatusMessage message = (StatusMessage) other;
         return Objects.equals(text, message.text);
     }
 
@@ -47,7 +40,7 @@ public class TextMessage extends Message {
 
     @Override
     public String toString() {
-        return "TextMessage{" +
+        return "StatusMessage{" +
                 "text='" + text + '\'' +
                 '}';
     }

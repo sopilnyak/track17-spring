@@ -1,5 +1,7 @@
 package track.msgtest.messenger.messages;
 
+import java.util.Objects;
+
 /**
  *
  */
@@ -27,6 +29,21 @@ public class LoginMessage extends Message {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!super.equals(other)) {
+            return false;
+        }
+        LoginMessage message = (LoginMessage) other;
+        return Objects.equals(name, message.getName()) &&
+                Objects.equals(pass, message.getPass());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name);
     }
 
     @Override

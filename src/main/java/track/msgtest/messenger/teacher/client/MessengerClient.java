@@ -11,11 +11,16 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import track.container.Container;
+import track.container.config.InvalidConfigurationException;
+import track.msgtest.messenger.User;
+import track.msgtest.messenger.messages.LoginMessage;
 import track.msgtest.messenger.messages.Message;
 import track.msgtest.messenger.messages.TextMessage;
 import track.msgtest.messenger.messages.Type;
 import track.msgtest.messenger.net.Protocol;
 import track.msgtest.messenger.net.ProtocolException;
+import track.msgtest.messenger.net.Session;
 import track.msgtest.messenger.net.StringProtocol;
 
 
@@ -104,7 +109,15 @@ public class MessengerClient {
      * Реагируем на входящее сообщение
      */
     public void onMessage(Message msg) {
-        log.info("Message received: {}", msg);
+        switch (msg.getType()) {
+            case MSG_STATUS:
+                System.out.println(((TextMessage) msg).getText());
+                break;
+            default:
+                System.out.println(msg);
+                break;
+        }
+
     }
 
     /**
@@ -118,16 +131,24 @@ public class MessengerClient {
         switch (cmdType) {
             case "/login":
                 // TODO: реализация
+                LoginMessage loginMessage = new LoginMessage(tokens[1], tokens[2]);
+                loginMessage.setType(Type.MSG_LOGIN);
+                send(loginMessage);
                 break;
             case "/help":
-                // TODO: реализация
+                System.err.println("Sorry, there's no help file yet :(");
                 break;
             case "/text":
                 // FIXME: пример реализации для простого текстового сообщения
                 TextMessage sendMessage = new TextMessage();
                 sendMessage.setType(Type.MSG_TEXT);
-                sendMessage.setText(tokens[1]);
-                send(sendMessage);
+                if (tokens.length > 1) {
+                    //sendMessage.setChatId(Long.parseLong(tokens[1]));
+                    sendMessage.setText(tokens[1]);
+                    send(sendMessage);
+                } else {
+                    System.out.println("Empty message, try again.");
+                }
                 break;
             // TODO: implement another types from wiki
 
@@ -149,16 +170,24 @@ public class MessengerClient {
 
         MessengerClient client = new MessengerClient();
         client.setHost("localhost");
-        client.setPort(19000);
+        client.setPort(8899);
         client.setProtocol(new StringProtocol());
+
+        /* try {
+            Container container = new Container("client.xml");
+            client = (MessengerClient) container.getByClass("client");
+        } catch (InvalidConfigurationException e) {
+            log.error("Invalid configuration");
+            return;
+        } */
 
         try {
             client.initSocket();
 
             // Цикл чтения с консоли
             Scanner scanner = new Scanner(System.in);
-            System.out.println("$");
             while (true) {
+                System.out.print("$ ");
                 String input = scanner.nextLine();
                 if ("q".equals(input)) {
                     return;
